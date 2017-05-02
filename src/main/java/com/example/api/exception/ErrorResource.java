@@ -1,4 +1,4 @@
-package com.example.api;
+package com.example.api.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

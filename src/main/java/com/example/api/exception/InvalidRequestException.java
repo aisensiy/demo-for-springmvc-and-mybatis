@@ -1,4 +1,4 @@
-package com.example.api;
+package com.example.api.exception;
 
 import org.springframework.validation.Errors;
 
