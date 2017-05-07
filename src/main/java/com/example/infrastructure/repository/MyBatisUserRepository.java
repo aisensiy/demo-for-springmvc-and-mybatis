@@ -17,4 +17,9 @@ public class MyBatisUserRepository implements UserRepository {
     public Optional<User> findById(String userId) {
         return null;
     }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return null;
+    }
 }

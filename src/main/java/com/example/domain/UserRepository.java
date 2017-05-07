@@ -10,4 +10,6 @@ public interface UserRepository {
     void save(User user);
 
     Optional<User> findById(String userId);
+
+    Optional<User> findByUsername(String username);
 }

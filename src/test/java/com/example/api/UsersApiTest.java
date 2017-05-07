@@ -78,6 +78,26 @@ public class UsersApiTest {
     }
 
     @Test
+    public void should_get_400_error_message_with_duplicated_username_when_create_user() throws Exception {
+        User user = new User("123", "abc");
+        when(userRepository.findByUsername(eq("abc"))).thenReturn(Optional.of(user));
+
+        Map<String, Object> duplicatedUserName = new HashMap<String, Object>() {{
+            put("username", "abc");
+        }};
+
+        given()
+            .contentType("application/json")
+            .body(duplicatedUserName)
+            .when().post("/users")
+            .then().statusCode(400)
+            .body("message", equalTo("Error in create user"))
+            .body("fieldErrors[0].field", equalTo("username"))
+            .body("fieldErrors[0].message", equalTo("duplicated username"))
+            .body("fieldErrors.size()", equalTo(1));
+    }
+
+    @Test
     public void should_get_one_user_success() throws Exception {
         User user = new User(UUID.randomUUID().toString(), "aisensiy");
         when(userRepository.findById(eq(user.getId()))).thenReturn(Optional.of(user));

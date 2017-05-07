@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +39,11 @@ public class UsersApi {
     @RequestMapping(method = POST)
     public ResponseEntity createUser(@Valid @RequestBody CreateUser createUser, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            throw new InvalidRequestException("Error in create user", bindingResult);
+        }
+
+        if (userRepository.findByUsername(createUser.getUsername()).isPresent()) {
+            bindingResult.rejectValue("username", "DUPLICATED", "duplicated username");
             throw new InvalidRequestException("Error in create user", bindingResult);
         }
         User user = new User(UUID.randomUUID().toString(), createUser.getUsername());
